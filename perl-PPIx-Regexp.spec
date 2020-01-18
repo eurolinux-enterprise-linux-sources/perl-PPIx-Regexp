@@ -1,6 +1,6 @@
 Name:           perl-PPIx-Regexp
 Version:        0.034
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Represent a regular expression of some sort
 License:        GPL+ or Artistic
 Group:          Development/Libraries
@@ -65,6 +65,9 @@ perl Build.PL installdirs=vendor
 %{_mandir}/man3/*
 
 %changelog
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 0.034-3
+- Mass rebuild 2013-12-27
+
 * Fri May 24 2013 Petr Pisar <ppisar@redhat.com> - 0.034-2
 - Specify all dependencies
 
