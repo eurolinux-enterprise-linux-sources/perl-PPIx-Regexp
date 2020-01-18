@@ -1,0 +1,317 @@
+0.034		2013-05-11	T. R. Wyant
+  No changes since 0.033_01
+
+0.033_01	2013-05-05	T. R. Wyant
+  Correct spelling and grammar errors in POD and comments. RT #85050.
+    Thanks David Steinbrunner for catching these.
+
+0.033		2013-02-22	T. R. Wyant
+  Allow interpolation in regex sets. It implies Perl 5.17.9 or higher.
+  Allow non-ASCII white space under /x. It implies Perl 5.17.9 or
+    higher.
+
+0.032		2013-02-06	T. R. Wyant
+  Fix problems with Regex Set functionality under Perl 5.6.2. CPAN
+    testers RULE!
+
+0.031		2013-01-31	T. R. Wyant
+  Have PPIx::Regexp::Token::Code (and offspring) become
+    PPIx::Regexp::Token::Unknown inside a regex set.
+
+0.030		2013-01-22	T. R. Wyant
+  Add Regex Sets, which were added to Perl as an experimental feature in
+    5.17.8. This is experimental in Perl, therefore the parse may
+    change.
+  Ditch PPIx::Regexp::Token::GroupType method __expect_after_match() in
+    favor of the more general __match_setup(). This is done without
+    deprecation because __expect_after_match() was documeted as
+    package-private, but noted in the change log because it _was_
+    documented.
+
+0.029		2013-01-14	T. R. Wyant
+  No changes from 0.028_02.
+
+0.028_02	2012-12-31	T. R. Wyant
+  Add method unescaped_content() to PPIx::Regexp::Element().
+  Rewrite the tokenizing code in PPIx::Regexp::Token::GroupType and
+    offspring to use regular expressions specific to the regexp
+    delimiter, and escaping only that delimiter. Thanks again to
+    Alexandr Ciornii for finding more of these.
+
+0.028_01	2012-12-20	T. R. Wyant
+  Fix mis-parse of /(\?|I)/ as a branch reset (it's really an
+    alternation). There may be more of these lurking. Thanks to Alexandr
+    Ciornii for finding this one.
+  Add options -files and -objectify to eg/predump.
+
+0.028		2012-06-06	T. R. Wyant
+  Replace all uses of YAML::Any with YAML, since they come in the same
+    distro, and YAML does not suffer from deprecation warnings.
+
+0.027		2012-05-28	T. R. Wyant
+  Eliminate unescaped literal "{" characters in regexps in
+    PPIx::Regexp::Token::Backreference and
+    PPIx::Regexp::Token::CharClass::Simple. These are deprecated in 5.17.0.
+
+0.026		2012-02-24	T. R. Wyant
+  Add support for \F (fold case), added in 5.15.8.
+
+0.025		2012-01-04	T. R. Wyant
+  Tolerate leading and trailing white space around the regular
+    expression.  These are still round-trip safe, since the white space
+    is tokenized.
+  Make Changes file conform to CPAN::Changes, and add
+    xt/author/changes.t to ensure continued compliance.
+
+0.024		2011-12-17	T. R. Wyant
+  Reinstate author test xt/author/manifest.t, which was clobbered
+    shortly before the release of 0.021_10.
+
+0.023		2011-12-08	T. R. Wyant
+  Correct address of FSF in the version of the GPL distributed in
+    LICENSES/Copying. Thanks to Petr Pisar for picking this up.
+
+0.022		2011-11-24	T. R. Wyant
+  Correct various documentation errors.
+  The default-modifier functionality is no longer considered
+    experimental.
+  No code changes since 0.021_11.
+
+0.021_11	2011-11-15	T. R. Wyant
+  Don't initialize effective modifiers with '^', since that wrongly
+    asserts that /d has been seen somewhere along the line.
+  Implement negation of match-semantic modifiers (e.g. 'no re /u;') by
+    setting the relevant datum to undef.
+  THE DEFAULT-MODIFIER FUNCTIONALITY IS EXPERIMENTAL, AND MAY BE CHANGED
+    WITHOUT NOTICE until the next production release.
+
+0.021_10	2011-11-14	T. R. Wyant
+  Support for default modifiers. This includes:
+    * default_modifiers argument to new() in PPIx::Regexp,
+      PPIx::Regexp::Tokenizer, and PPIx::Regexp::Dumper
+    * Public method modifier_asserted() on PPIx::Regexp, to return
+      whether a given modifier is actually in effect. The results of the
+      modifier() method are unchanged.
+    THIS FUNCTIONALITY IS EXPERIMENTAL, AND MAY BE CHANGED OR REVOKED
+    WITHOUT WARNING.
+  Require Test::More 0.88 for installation. Eliminate all the 'eval
+    { require ... }' logic in favor of 'use Test::More 0.88'.
+  Have Makefile.PL make use of {BUILD_REQUIRES} if it is available.
+  Fix PPIx::Regexp::Token::Whitespace->can_be_quantified() to return
+    false.
+
+0.021		2011-07-22	T. R. Wyant
+  Modified tokenizer to correctly handle a back slash used as a
+    delimiter. I believe.
+  PPIx::Regexp::Dumper now dumps the results of ppi() if that method is
+    present and -verbose is asserted.
+
+0.020		2011-04-02	T. R. Wyant
+  Corrected perl_version_introduced():
+    \R is now 5.009005 (was 5.000).
+
+0.019		2011-03-01	T. R. Wyant
+  Various corrections to perl_version_introduced():
+    \X is now 5.006 (was 5.000);
+    \N{name} is now 5.006001 (was 5.006);
+    \N{U+xxxx} is now 5.008 (was 5.006).
+  The \C is now parsed as a PPIx::Regexp::Token::CharClass::Simple. It
+    was previously considered a PPIx::Regexp::Token::Literal.
+  Ensure that \N{$foo} parses as a Unicode literal, not a quantified \N.
+    The ordinal() method returns undef for this.
+  Understand the /aa modifier, introduced with 5.13.10.
+  Report perl_version_introduced() of 5.013010 for the new semantic
+    modifiers when modifying the entire expression.
+  Correct handling of interpolations like ${^foo} and $#{foo}.
+
+0.018		2011-02-16	T. R. Wyant
+  No changes (other than version) since 0.017_02.
+
+0.017_02	2011-01-31	T. R. Wyant
+  Override ppi() in PPIx::Regexp::Token::Interpolation to provide the
+    proper PPI when variable names are bracketed.
+  Properly parse bracketed variable names (I hope!), which may not be
+    subscripted.
+
+0.017_01	2011-01-28	T. R. Wyant
+  Take account of possible '$' or '@' casts before a symbol in an
+    interpolation (e.g. $$foo{bar}, which is equivalent to $foo->{bar}).
+
+0.017		2011-01-26	T. R. Wyant
+  Add the /a modifier to PPI::Regexp::Token::Modifiers, legal only in
+    the (?:...) construction. This was introduced in Perl 5.13.9.
+  When parsing an interpolation from a replacement string (rather than a
+    regular expression), take subscripts at face value rather than
+    trying to disambiguate them from quantifiers and character classes,
+    which they can't be in this context.
+
+0.016		2011-01-05	T. R. Wyant
+  The PPIx::Regexp::Token::Code perl_version_introduced() method now
+    returns the minimum Perl version (currently set to 5.000) if it is
+    used to represent the substitution portion of s///e.
+  Update copyright to 2011.
+
+0.015		2010-10-25	T. R. Wyant
+  Documented intent to revoke support for features introduced in a
+    development Perl which do not make it to a production release. This
+    is necessary because in this case the syntax could be reused with
+    different semantics.
+  Added support for Perl 5.13.6 (?^...) construction.
+  Added support for Perl 5.13.6 d, l, and u modifiers.
+  Fixed inconsistency in perl_version_introduced() results between
+    PPIx::Regexp::Token::Modifier and
+    PPIx::Regexp::Token::GroupType::Modifier.
+  Corrected PPIx::Regexp::Constant RE_CAPTURE_NAME docs, somehow missed
+    back at 0.010_01.
+
+0.014		2010-10-14	T. R. Wyant
+  Recognize \o{...} as a PPIx::Regexp::Token::Literal, with
+    perl_version_introduced() of 5.0013003.
+  Terminate \0.. through \7.. after three characters, as Perl does.
+    These two were brought to my attention by Brian D.  Foy's "The
+    Effective Perler" for October 11 2010,
+    http://www.effectiveperlprogramming.com/blog/697
+  Correct the PPIx::Regexp::Token::Literal ordinal() method for '\b'. As
+    a literal, this is a back space.
+
+0.013		2010-10-10	T. R. Wyant
+  Declare a parse failure if characters are found between the '}' and
+    the ')' of (?{...}) and (??{...}), and rebless the tokens to
+    ::Unknown. Perl does not accept anything here, so I think I should
+    not either.
+  Whitespace tweak in the PPIx::Regexp::Dumper test output for the
+    failures test.
+  Replace the PPI logic in PPIx::Regexp::Token::Code with a call to
+    $tokenizer->find_matching_delimiter(). This is actually the way Perl
+    works, as a look at toke.c and regcomp.c makes clear.
+  Push the perl_version_introduced() back to 5.0 at the request of
+    Alexandr Ciornii, for the potential benefit of Perl::MinimumVersion.
+    This was done mostly by reading the various perlre, perldelta, and
+    perlop documents, so these should be taken with a HUGE grain of
+    salt.
+
+0.012		2010-09-26	T. R. Wyant
+  Track all the features reported as introduced (or removed) in Perl
+    5.010 back to Perl 5.009005, and report them as such.
+  Report modifier /r as having been introduced in Perl 5.013002, rather
+    than the default of 5.006.
+
+0.011		2010-09-16	T. R. Wyant
+  No changes from 0.010_01.
+
+0.010_01	2010-09-11	T. R. Wyant
+  Remove dependencies on Params::Util and Readonly. The latter was
+    requested by ADAMK for the benefit of Padre. It involved changing
+    the symbols exported from PPIx::Regexp::Constant, but these were
+    documented as private, so ...
+  Parse POSIX character classes [=a=] and [.a.] as
+    PPIx::Regexp::Token::CharClass::POSIX::Unknown, which counts as a
+    parse failure since these are not supported by Perl.
+  Make the PPI::Document created by PPIx::Regexp::Token::Code->ppi() be
+    read only. This means we need PPI 1.116. Cache the document, and
+    ensure the cached result is returned on subsequent calls.
+
+0.010		2010-08-06	T. R. Wyant
+  Fix fatal error in PPIx::Regexp::Token::Code->ppi().
+  Move author tests from xt/ to xt/author/.
+
+0.009		2010-08-03	T. R. Wyant
+  Recognize s/.../.../ee as being different from s/.../.../e. In
+    particular, the replacement portion of the former is _not_ a Perl
+    expression: it's an interpolatble string, which later gets
+    eval{}'ed.
+
+0.008		2010-07-01	T. R. Wyant
+  Promote methods can_be_quantified() and is_quantifier() from
+    PPIx::Regexp::Token to PPIx::Regexp::Element, so all classes inherit
+    them. They still return true and false respectively.
+  Override can_be_quantified() to return false on PPIx::Regexp,
+    PPIx::Regexp::Structure::Quantifier,
+    PPIx::Regexp::Structure::Regexp, and
+    PPIx::Regexp::Structure::Replacement.
+  Override is_quantifier() to return true on
+    PPIx::Regexp::Structure::Quantifier.
+  Modify PPIx::Regexp::Dumper to be able to display can_be_quantified
+    and is_quantifier for PPIx::Regexp::Node objects when dumping
+    verbosely.
+  Convert internal data to Readonly in PPIx::Regexp::Lexer,
+    PPIx::Regexp::Token::CharClass::Simple,
+    PPIx::Regexp::Token::Structure, and PPIx::Regexp::Tokenizer.
+  Remove leftover boilerplate in PPIx::Regexp::Token::CharClass::Simple.
+
+0.007_01	2010-06-28	T. R. Wyant
+  Explicitly require a minimum Perl of 5.006.
+  Centralized dependencies in inc/PPIx/Regexp/Meta.pm.
+  Removed claim that PPIx::Regexp is alpha code. Docs still say that the
+    interface can be changed, but now it will go through a deprecation
+    cycle.
+
+0.007		2010-04-28	T. R. Wyant
+  PPIx::Regexp::Lexer no longer fails when encountering expressions like
+    m{)}. Instead, it marks the right parenthesis as an unmatched
+    delimiter.
+
+0.006_01	2010-04-23	T. R. Wyant
+  Fixed RT 56864 - PPIx::Regexp::Lexer fails in Perl::Critic under Perl
+    5.13.0. This was due to the value of a returned $+[0] getting
+    transmogrified before the caller saw it. I never did isolate what
+    triggered the bug.
+  You can now get a tokenizer trace by setting environment value
+    PPIX_REGEXP_TOKENIZER_TRACE to a non-zero numeric value. This is
+    unsupported, though.
+
+0.006		2010-02-26	T. R. Wyant
+  Update copyright from 2009 to 2009-2010.
+  Parse \N{...} in accordance with perl5115delta. The curlys must
+    contain an alpha followed by alphanumerics, spaces, parens, colons,
+    or dashes. \N{ without a matching } is a character class (if legal)
+    followed by a literal '{'.
+  Parse \N inside a character class as PPI::Regexp::Token::Unknown,
+    since Perl 5.11.5 considers this a compile error. A \N{...} inside a
+    character class is still OK.
+  Add method match() to PPIx::Regexp::Tokenizer. This is analogous to
+    capture(), but returns the entire matched string.
+
+0.005		2009-12-26	T. R. Wyant
+  Recognize \N (without curlys), back-ported from Perl 6 into 5.11.
+  Recognize unicode characters as \N{[[:alpha:]] ... rather than
+    \N{[\w\s:] ... This is per the 5.11 documentation, but I think Perl
+    always worked this way.
+  Recognize loose matching of Unicode character classes, and allow '='
+    in lieu of a single ':' in a Unicode character class (this from Perl
+    5.11.3).
+  PPIx::Regexp::Dumper now produces the proper output when called with
+    perl_version => 1, test => 1.
+  Describe the typical content of the object in the documentation for
+    PPIx::Regexp::Structure::NamedCapture and
+    PPIx::Regexp::Token::GroupType::NamedCapture.
+
+0.004		2009-11-09	T. R. Wyant
+  Have PPIx::Regexp::Token::Literal correctly recognize when
+    charnames::vianame() is unavailable, and decouple this from the
+    handling of \N{U+hhhh}.
+  Add dependency on Task::Weaken, since depending on Scalar::Util
+    appears not to cut it.
+  Correct the assignment of the license type in Makefile.PL.
+
+0.003		2009-11-05	T. R. Wyant
+  Have PPIx::Regexp::Token::Literal recognize \N{U+hhhh} (where hhhh
+    represents hex digits), and provide its ordinal (hhhh). Remove
+    recognition of \N. (. = any character), which Perl does not do.
+  Fix $re->flush_cache() so that it actually removes $re and only
+    $re from the cache.
+  Add delimiters() method to PPIx::Regexp::Main and PPIx::Regexp.
+    Support this in eg/prenav.
+  Increase test coverage and remove dead code.
+  Count tests in t/parse.t and t/unit.t
+
+0.002		2009-10-28	T. R. Wyant
+  In verbose mode, have PPIx::Regexp::Dumper dump the absolute capture
+    number referred to by a numbered reference.
+  Have eg/preslurp pass its -verbose option to PPIx::Regexp::Dumper
+  Don't use Test::More::isa_ok for the t/basic.t class heritage tests,
+    since some versions of Test::More require a reference for the first
+    argument of isa_ok().
+
+0.001		2009-10-21	T. R. Wyant
+  Initial release.
